@@ -24,6 +24,7 @@ from .nodes_tripo import TripoExtension_ISO
 from .nodes_veo2 import VeoExtension_ISO
 from .nodes_vidu import ViduExtension_ISO
 from .nodes_wan import WanApiExtension_ISO
+from .nodes_zero_copy_test import ZeroCopyTestExtension_ISO
 
 __all__ = ['comfy_entrypoint']
 
@@ -62,5 +63,6 @@ async def comfy_entrypoint():
         VeoExtension_ISO(),
         ViduExtension_ISO(),
         WanApiExtension_ISO(),
+        ZeroCopyTestExtension_ISO(),
     ]
     return composite
