@@ -11,7 +11,7 @@ import torch
 from typing_extensions import override
 from comfy_api.latest import ComfyExtension, IO
 from comfy_api.input_impl.video_types import VideoCodec, VideoContainer, VideoInput
-from comfy_api_nodes.apis import pika_api as pika_defs
+import comfy_api_nodes.apis as pika_defs
 from comfy_api_nodes.util import validate_string, download_url_to_video_output, tensor_to_bytesio, ApiEndpoint, sync_op, poll_op
 PATH_PIKADDITIONS = '/proxy/pika/generate/pikadditions'
 PATH_PIKASWAPS = '/proxy/pika/generate/pikaswaps'

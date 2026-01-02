@@ -10,7 +10,7 @@ import torch
 from typing_extensions import override
 from comfy_api.latest import IO, ComfyExtension, Input, InputImpl
 from comfy_api_nodes.apis import KlingCameraControl, KlingCameraConfig, KlingCameraControlType, KlingVideoGenDuration, KlingVideoGenMode, KlingVideoGenAspectRatio, KlingVideoGenModelName, KlingText2VideoRequest, KlingText2VideoResponse, KlingImage2VideoRequest, KlingImage2VideoResponse, KlingVideoExtendRequest, KlingVideoExtendResponse, KlingLipSyncVoiceLanguage, KlingLipSyncInputObject, KlingLipSyncRequest, KlingLipSyncResponse, KlingVirtualTryOnModelName, KlingVirtualTryOnRequest, KlingVirtualTryOnResponse, KlingVideoResult, KlingImageResult, KlingImageGenerationsRequest, KlingImageGenerationsResponse, KlingImageGenImageReferenceType, KlingImageGenModelName, KlingImageGenAspectRatio, KlingVideoEffectsRequest, KlingVideoEffectsResponse, KlingDualCharacterEffectsScene, KlingSingleImageEffectsScene, KlingDualCharacterEffectInput, KlingSingleImageEffectInput, KlingCharacterEffectModelName, KlingSingleImageEffectModelName
-from comfy_api_nodes.apis.kling_api import OmniImageParamImage, OmniParamImage, OmniParamVideo, OmniProFirstLastFrameRequest, OmniProImageRequest, OmniProReferences2VideoRequest, OmniProText2VideoRequest, OmniTaskStatusResponse
+from comfy_api_nodes.apis.kling_api import OmniImageParamImage, OmniParamImage, OmniParamVideo, OmniProFirstLastFrameRequest, OmniProImageRequest, OmniProReferences2VideoRequest, OmniProText2VideoRequest, TaskStatusResponse
 from comfy_api_nodes.util import ApiEndpoint, download_url_to_image_tensor, download_url_to_video_output, get_number_of_images, poll_op, sync_op, tensor_to_base64_string, upload_audio_to_comfyapi, upload_images_to_comfyapi, upload_video_to_comfyapi, validate_image_aspect_ratio, validate_image_dimensions, validate_string, validate_video_dimensions, validate_video_duration
 KLING_API_VERSION = 'v1'
 PATH_TEXT_TO_VIDEO = f'/proxy/kling/{KLING_API_VERSION}/videos/text2video'
@@ -64,10 +64,10 @@ def normalize_omni_prompt_references(prompt: str) -> str:
     prompt = re.sub('(?<!\\w)@image(?P<idx>\\d*)(?!\\w)', _image_repl, prompt)
     return re.sub('(?<!\\w)@video(?P<idx>\\d*)(?!\\w)', _video_repl, prompt)
 
-async def finish_omni_video_task(cls: type[IO.ComfyNode], response: OmniTaskStatusResponse) -> IO.NodeOutput:
+async def finish_omni_video_task(cls: type[IO.ComfyNode], response: TaskStatusResponse) -> IO.NodeOutput:
     if response.code:
         raise RuntimeError(f'Kling request failed. Code: {response.code}, Message: {response.message}, Data: {response.data}')
-    final_response = await poll_op(cls, ApiEndpoint(path=f'/proxy/kling/v1/videos/omni-video/{response.data.task_id}'), response_model=OmniTaskStatusResponse, status_extractor=lambda r: r.data.task_status if r.data else None, max_poll_attempts=160)
+    final_response = await poll_op(cls, ApiEndpoint(path=f'/proxy/kling/v1/videos/omni-video/{response.data.task_id}'), response_model=TaskStatusResponse, status_extractor=lambda r: r.data.task_status if r.data else None, max_poll_attempts=160)
     return IO.NodeOutput(await download_url_to_video_output(final_response.data.task_result.videos[0].url))
 
 def is_valid_camera_control_configs(configs: list[float]) -> bool:
@@ -271,7 +271,7 @@ class OmniProTextToVideoNode_ISO(IO.ComfyNode):
     @classmethod
     async def execute(cls, model_name: str, prompt: str, aspect_ratio: str, duration: int) -> IO.NodeOutput:
         validate_string(prompt, min_length=1, max_length=2500)
-        response = await sync_op(cls, ApiEndpoint(path='/proxy/kling/v1/videos/omni-video', method='POST'), response_model=OmniTaskStatusResponse, data=OmniProText2VideoRequest(model_name=model_name, prompt=prompt, aspect_ratio=aspect_ratio, duration=str(duration)))
+        response = await sync_op(cls, ApiEndpoint(path='/proxy/kling/v1/videos/omni-video', method='POST'), response_model=TaskStatusResponse, data=OmniProText2VideoRequest(model_name=model_name, prompt=prompt, aspect_ratio=aspect_ratio, duration=str(duration)))
         return await finish_omni_video_task(cls, response)
 
 class OmniProFirstLastFrameNode_ISO(IO.ComfyNode):
@@ -301,7 +301,7 @@ class OmniProFirstLastFrameNode_ISO(IO.ComfyNode):
                 validate_image_aspect_ratio(i, (1, 2.5), (2.5, 1))
             for i in await upload_images_to_comfyapi(cls, reference_images, wait_label='Uploading reference frame(s)'):
                 image_list.append(OmniParamImage(image_url=i))
-        response = await sync_op(cls, ApiEndpoint(path='/proxy/kling/v1/videos/omni-video', method='POST'), response_model=OmniTaskStatusResponse, data=OmniProFirstLastFrameRequest(model_name=model_name, prompt=prompt, duration=str(duration), image_list=image_list))
+        response = await sync_op(cls, ApiEndpoint(path='/proxy/kling/v1/videos/omni-video', method='POST'), response_model=TaskStatusResponse, data=OmniProFirstLastFrameRequest(model_name=model_name, prompt=prompt, duration=str(duration), image_list=image_list))
         return await finish_omni_video_task(cls, response)
 
 class OmniProImageToVideoNode_ISO(IO.ComfyNode):
@@ -322,7 +322,7 @@ class OmniProImageToVideoNode_ISO(IO.ComfyNode):
         image_list: list[OmniParamImage] = []
         for i in await upload_images_to_comfyapi(cls, reference_images, wait_label='Uploading reference image'):
             image_list.append(OmniParamImage(image_url=i))
-        response = await sync_op(cls, ApiEndpoint(path='/proxy/kling/v1/videos/omni-video', method='POST'), response_model=OmniTaskStatusResponse, data=OmniProReferences2VideoRequest(model_name=model_name, prompt=prompt, aspect_ratio=aspect_ratio, duration=str(duration), image_list=image_list))
+        response = await sync_op(cls, ApiEndpoint(path='/proxy/kling/v1/videos/omni-video', method='POST'), response_model=TaskStatusResponse, data=OmniProReferences2VideoRequest(model_name=model_name, prompt=prompt, aspect_ratio=aspect_ratio, duration=str(duration), image_list=image_list))
         return await finish_omni_video_task(cls, response)
 
 class OmniProVideoToVideoNode_ISO(IO.ComfyNode):
@@ -347,7 +347,7 @@ class OmniProVideoToVideoNode_ISO(IO.ComfyNode):
             for i in await upload_images_to_comfyapi(cls, reference_images, wait_label='Uploading reference image'):
                 image_list.append(OmniParamImage(image_url=i))
         video_list = [OmniParamVideo(video_url=await upload_video_to_comfyapi(cls, reference_video, wait_label='Uploading reference video'), refer_type='feature', keep_original_sound='yes' if keep_original_sound else 'no')]
-        response = await sync_op(cls, ApiEndpoint(path='/proxy/kling/v1/videos/omni-video', method='POST'), response_model=OmniTaskStatusResponse, data=OmniProReferences2VideoRequest(model_name=model_name, prompt=prompt, aspect_ratio=aspect_ratio, duration=str(duration), image_list=image_list if image_list else None, video_list=video_list))
+        response = await sync_op(cls, ApiEndpoint(path='/proxy/kling/v1/videos/omni-video', method='POST'), response_model=TaskStatusResponse, data=OmniProReferences2VideoRequest(model_name=model_name, prompt=prompt, aspect_ratio=aspect_ratio, duration=str(duration), image_list=image_list if image_list else None, video_list=video_list))
         return await finish_omni_video_task(cls, response)
 
 class OmniProEditVideoNode_ISO(IO.ComfyNode):
@@ -372,7 +372,7 @@ class OmniProEditVideoNode_ISO(IO.ComfyNode):
             for i in await upload_images_to_comfyapi(cls, reference_images, wait_label='Uploading reference image'):
                 image_list.append(OmniParamImage(image_url=i))
         video_list = [OmniParamVideo(video_url=await upload_video_to_comfyapi(cls, video, wait_label='Uploading base video'), refer_type='base', keep_original_sound='yes' if keep_original_sound else 'no')]
-        response = await sync_op(cls, ApiEndpoint(path='/proxy/kling/v1/videos/omni-video', method='POST'), response_model=OmniTaskStatusResponse, data=OmniProReferences2VideoRequest(model_name=model_name, prompt=prompt, aspect_ratio=None, duration=None, image_list=image_list if image_list else None, video_list=video_list))
+        response = await sync_op(cls, ApiEndpoint(path='/proxy/kling/v1/videos/omni-video', method='POST'), response_model=TaskStatusResponse, data=OmniProReferences2VideoRequest(model_name=model_name, prompt=prompt, aspect_ratio=None, duration=None, image_list=image_list if image_list else None, video_list=video_list))
         return await finish_omni_video_task(cls, response)
 
 class OmniProImageNode_ISO(IO.ComfyNode):
@@ -394,10 +394,10 @@ class OmniProImageNode_ISO(IO.ComfyNode):
                 validate_image_aspect_ratio(i, (1, 2.5), (2.5, 1))
             for i in await upload_images_to_comfyapi(cls, reference_images, wait_label='Uploading reference image'):
                 image_list.append(OmniImageParamImage(image=i))
-        response = await sync_op(cls, ApiEndpoint(path='/proxy/kling/v1/images/omni-image', method='POST'), response_model=OmniTaskStatusResponse, data=OmniProImageRequest(model_name=model_name, prompt=prompt, resolution=resolution.lower(), aspect_ratio=aspect_ratio, image_list=image_list if image_list else None))
+        response = await sync_op(cls, ApiEndpoint(path='/proxy/kling/v1/images/omni-image', method='POST'), response_model=TaskStatusResponse, data=OmniProImageRequest(model_name=model_name, prompt=prompt, resolution=resolution.lower(), aspect_ratio=aspect_ratio, image_list=image_list if image_list else None))
         if response.code:
             raise RuntimeError(f'Kling request failed. Code: {response.code}, Message: {response.message}, Data: {response.data}')
-        final_response = await poll_op(cls, ApiEndpoint(path=f'/proxy/kling/v1/images/omni-image/{response.data.task_id}'), response_model=OmniTaskStatusResponse, status_extractor=lambda r: r.data.task_status if r.data else None)
+        final_response = await poll_op(cls, ApiEndpoint(path=f'/proxy/kling/v1/images/omni-image/{response.data.task_id}'), response_model=TaskStatusResponse, status_extractor=lambda r: r.data.task_status if r.data else None)
         return IO.NodeOutput(await download_url_to_image_tensor(final_response.data.task_result.images[0].url))
 
 class KlingCameraControlT2VNode_ISO(IO.ComfyNode):
