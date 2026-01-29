@@ -3,7 +3,7 @@ import torch
 from pydantic import BaseModel
 from typing_extensions import override
 from comfy_api.latest import IO, ComfyExtension
-from comfy_api_nodes.apis.bfl_api import BFLFluxExpandImageRequest, BFLFluxFillImageRequest, BFLFluxKontextProGenerateRequest, BFLFluxProGenerateResponse, BFLFluxProUltraGenerateRequest, BFLFluxStatusResponse, BFLStatus, Flux2ProGenerateRequest
+from comfy_api_nodes.apis.bfl import BFLFluxExpandImageRequest, BFLFluxFillImageRequest, BFLFluxKontextProGenerateRequest, BFLFluxProGenerateResponse, BFLFluxProUltraGenerateRequest, BFLFluxStatusResponse, BFLStatus, Flux2ProGenerateRequest
 from comfy_api_nodes.util import ApiEndpoint, download_url_to_image_tensor, get_number_of_images, poll_op, resize_mask_to_image, sync_op, tensor_to_base64_string, validate_aspect_ratio_string, validate_string
 
 def convert_mask_to_image(mask: torch.Tensor):

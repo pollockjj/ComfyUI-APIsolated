@@ -1,7 +1,7 @@
 import torch
 from typing_extensions import override
 from comfy_api.latest import IO, ComfyExtension
-from comfy_api_nodes.apis.pixverse_api import PixverseTextVideoRequest, PixverseImageVideoRequest, PixverseTransitionVideoRequest, PixverseImageUploadResponse, PixverseVideoResponse, PixverseGenerationStatusResponse, PixverseAspectRatio, PixverseQuality, PixverseDuration, PixverseMotionMode, PixverseStatus, PixverseIO, pixverse_templates
+from comfy_api_nodes.apis.pixverse import PixverseTextVideoRequest, PixverseImageVideoRequest, PixverseTransitionVideoRequest, PixverseImageUploadResponse, PixverseVideoResponse, PixverseGenerationStatusResponse, PixverseAspectRatio, PixverseQuality, PixverseDuration, PixverseMotionMode, PixverseStatus, PixverseIO, pixverse_templates
 from comfy_api_nodes.util import ApiEndpoint, download_url_to_video_output, poll_op, sync_op, tensor_to_bytesio, validate_string
 AVERAGE_DURATION_T2V = 32
 AVERAGE_DURATION_I2V = 30

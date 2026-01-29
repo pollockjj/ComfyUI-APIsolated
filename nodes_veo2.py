@@ -4,7 +4,7 @@ import torch
 from typing_extensions import override
 from comfy_api.input_impl.video_types import VideoFromFile
 from comfy_api.latest import IO, ComfyExtension
-from comfy_api_nodes.apis.veo_api import VeoGenVidPollRequest, VeoGenVidPollResponse, VeoGenVidRequest, VeoGenVidResponse, VeoRequestInstance, VeoRequestInstanceImage, VeoRequestParameters
+from comfy_api_nodes.apis.veo import VeoGenVidPollRequest, VeoGenVidPollResponse, VeoGenVidRequest, VeoGenVidResponse, VeoRequestInstance, VeoRequestInstanceImage, VeoRequestParameters
 from comfy_api_nodes.util import ApiEndpoint, download_url_to_video_output, poll_op, sync_op, tensor_to_base64_string
 AVERAGE_DURATION_VIDEO_GEN = 32
 MODELS_MAP = {'veo-2.0-generate-001': 'veo-2.0-generate-001', 'veo-3.1-generate': 'veo-3.1-generate-preview', 'veo-3.1-fast-generate': 'veo-3.1-fast-generate-preview', 'veo-3.0-generate-001': 'veo-3.0-generate-001', 'veo-3.0-fast-generate-001': 'veo-3.0-fast-generate-001'}

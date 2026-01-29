@@ -3,7 +3,7 @@ from typing import Optional
 import torch
 from typing_extensions import override
 from comfy_api.latest import IO, ComfyExtension
-from comfy_api_nodes.apis.tripo_api import TripoAnimateRetargetRequest, TripoAnimateRigRequest, TripoConvertModelRequest, TripoFileEmptyReference, TripoFileReference, TripoImageToModelRequest, TripoModelVersion, TripoMultiviewToModelRequest, TripoOrientation, TripoRefineModelRequest, TripoStyle, TripoTaskResponse, TripoTaskStatus, TripoTaskType, TripoTextToModelRequest, TripoTextureModelRequest, TripoUrlReference
+from comfy_api_nodes.apis.tripo import TripoAnimateRetargetRequest, TripoAnimateRigRequest, TripoConvertModelRequest, TripoFileEmptyReference, TripoFileReference, TripoImageToModelRequest, TripoModelVersion, TripoMultiviewToModelRequest, TripoOrientation, TripoRefineModelRequest, TripoStyle, TripoTaskResponse, TripoTaskStatus, TripoTaskType, TripoTextToModelRequest, TripoTextureModelRequest, TripoUrlReference
 from comfy_api_nodes.util import ApiEndpoint, download_url_as_bytesio, poll_op, sync_op, upload_images_to_comfyapi
 from folder_paths import get_output_directory
 

@@ -2,7 +2,7 @@ from typing import Optional
 import torch
 from typing_extensions import override
 from comfy_api.latest import IO, ComfyExtension
-from comfy_api_nodes.apis.luma_api import LumaAspectRatio, LumaCharacterRef, LumaConceptChain, LumaGeneration, LumaGenerationRequest, LumaImageGenerationRequest, LumaImageIdentity, LumaImageModel, LumaImageReference, LumaIO, LumaKeyframes, LumaModifyImageRef, LumaReference, LumaReferenceChain, LumaVideoModel, LumaVideoModelOutputDuration, LumaVideoOutputResolution, get_luma_concepts
+from comfy_api_nodes.apis.luma import LumaAspectRatio, LumaCharacterRef, LumaConceptChain, LumaGeneration, LumaGenerationRequest, LumaImageGenerationRequest, LumaImageIdentity, LumaImageModel, LumaImageReference, LumaIO, LumaKeyframes, LumaModifyImageRef, LumaReference, LumaReferenceChain, LumaVideoModel, LumaVideoModelOutputDuration, LumaVideoOutputResolution, get_luma_concepts
 from comfy_api_nodes.util import ApiEndpoint, download_url_to_image_tensor, download_url_to_video_output, poll_op, sync_op, upload_images_to_comfyapi, validate_string
 LUMA_T2V_AVERAGE_DURATION = 105
 LUMA_I2V_AVERAGE_DURATION = 100

@@ -4,7 +4,7 @@ import aiohttp
 import torch
 from typing_extensions import override
 from comfy_api.latest import IO, ComfyExtension, Input
-from comfy_api_nodes.apis import topaz_api
+from comfy_api_nodes.apis import topaz as topaz_api
 from comfy_api_nodes.util import ApiEndpoint, download_url_to_image_tensor, download_url_to_video_output, get_fs_object_size, get_number_of_images, poll_op, sync_op, upload_images_to_comfyapi, validate_container_format_is_mp4
 UPSCALER_MODELS_MAP = {'Starlight (Astra) Fast': 'slf-1', 'Starlight (Astra) Creative': 'slc-1'}
 UPSCALER_VALUES_MAP = {'FullHD (1080p)': 1920, '4K (2160p)': 3840}

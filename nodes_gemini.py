@@ -12,7 +12,7 @@ from typing_extensions import override
 import folder_paths
 from comfy_api.latest import IO, ComfyExtension, Input
 from comfy_api.util import VideoCodec, VideoContainer
-from comfy_api_nodes.apis.gemini_api import GeminiContent, GeminiFileData, GeminiGenerateContentRequest, GeminiGenerateContentResponse, GeminiImageConfig, GeminiImageGenerateContentRequest, GeminiImageGenerationConfig, GeminiInlineData, GeminiMimeType, GeminiPart, GeminiRole, Modality
+from comfy_api_nodes.apis.gemini import GeminiContent, GeminiFileData, GeminiGenerateContentRequest, GeminiGenerateContentResponse, GeminiImageConfig, GeminiImageGenerateContentRequest, GeminiImageGenerationConfig, GeminiInlineData, GeminiMimeType, GeminiPart, GeminiRole, Modality
 from comfy_api_nodes.util import ApiEndpoint, audio_to_base64_string, bytesio_to_image_tensor, get_number_of_images, sync_op, tensor_to_base64_string, upload_images_to_comfyapi, validate_string, video_to_base64_string
 GEMINI_BASE_ENDPOINT = '/proxy/vertexai/gemini'
 GEMINI_MAX_INPUT_FILE_SIZE = 20 * 1024 * 1024

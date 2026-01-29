@@ -2,7 +2,7 @@ from typing import Optional
 import torch
 from typing_extensions import override
 from comfy_api.latest import IO, ComfyExtension
-from comfy_api_nodes.apis.minimax_api import MinimaxFileRetrieveResponse, MiniMaxModel, MinimaxTaskResultResponse, MinimaxVideoGenerationRequest, MinimaxVideoGenerationResponse, SubjectReferenceItem
+from comfy_api_nodes.apis.minimax import MinimaxFileRetrieveResponse, MiniMaxModel, MinimaxTaskResultResponse, MinimaxVideoGenerationRequest, MinimaxVideoGenerationResponse, SubjectReferenceItem
 from comfy_api_nodes.util import ApiEndpoint, download_url_to_video_output, poll_op, sync_op, upload_images_to_comfyapi, validate_string
 I2V_AVERAGE_DURATION = 114
 T2V_AVERAGE_DURATION = 234

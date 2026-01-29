@@ -13,7 +13,7 @@ from typing import Optional
 from io import BytesIO
 from typing_extensions import override
 from PIL import Image
-from comfy_api_nodes.apis.rodin_api import Rodin3DGenerateRequest, Rodin3DGenerateResponse, Rodin3DCheckStatusRequest, Rodin3DCheckStatusResponse, Rodin3DDownloadRequest, Rodin3DDownloadResponse, JobStatus
+from comfy_api_nodes.apis.rodin import Rodin3DGenerateRequest, Rodin3DGenerateResponse, Rodin3DCheckStatusRequest, Rodin3DCheckStatusResponse, Rodin3DDownloadRequest, Rodin3DDownloadResponse, JobStatus
 from comfy_api_nodes.util import sync_op, poll_op, ApiEndpoint, download_url_to_bytesio
 from comfy_api.latest import ComfyExtension, IO
 COMMON_PARAMETERS = [IO.Int.Input('Seed', default=0, min=0, max=65535, display_mode=IO.NumberDisplay.number, optional=True), IO.Combo.Input('Material_Type', options=['PBR', 'Shaded'], default='PBR', optional=True), IO.Combo.Input('Polygon_count', options=['4K-Quad', '8K-Quad', '18K-Quad', '50K-Quad', '200K-Triangle'], default='18K-Quad', optional=True)]
