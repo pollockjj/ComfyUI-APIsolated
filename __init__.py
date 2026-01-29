@@ -31,7 +31,7 @@ __all__ = ['comfy_entrypoint']
 class CompositeAPIExtension(ComfyExtension):
     def __init__(self):
         self.extensions = []
-    
+
     async def get_node_list(self) -> list[type[IO.ComfyNode]]:
         nodes = []
         for ext in self.extensions:
