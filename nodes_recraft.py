@@ -6,7 +6,14 @@ from PIL import UnidentifiedImageError
 from typing_extensions import override
 from comfy.utils import ProgressBar
 from comfy_api.latest import IO, ComfyExtension
-from comfy_api_nodes.apis.recraft import RecraftColor, RecraftColorChain, RecraftControls, RecraftImageGenerationRequest, RecraftImageGenerationResponse, RecraftImageSize, RecraftIO, RecraftModel, RecraftStyle, RecraftStyleV3, get_v3_substyles
+from comfy_api_nodes.apis.recraft import RecraftColor, RecraftColorChain, RecraftControls, RecraftImageGenerationRequest, RecraftImageGenerationResponse, RecraftImageSize, RecraftIO, RecraftStyle, RecraftStyleV3, get_v3_substyles
+
+try:
+    from comfy_api_nodes.apis.recraft import RecraftModel
+except ImportError:
+    # ComfyUI >= 0.14 removed RecraftModel enum; requests now accept plain model strings.
+    class RecraftModel:
+        recraftv3 = "recraftv3"
 from comfy_api_nodes.util import ApiEndpoint, bytesio_to_image_tensor, download_url_as_bytesio, resize_mask_to_image, sync_op, tensor_to_bytesio, validate_string
 from comfy_extras.nodes_images import SVG
 

@@ -9,7 +9,48 @@ import re
 import torch
 from typing_extensions import override
 from comfy_api.latest import IO, ComfyExtension, Input, InputImpl
-from comfy_api_nodes.apis import KlingCameraControl, KlingCameraConfig, KlingCameraControlType, KlingVideoGenDuration, KlingVideoGenMode, KlingVideoGenAspectRatio, KlingVideoGenModelName, KlingText2VideoRequest, KlingText2VideoResponse, KlingImage2VideoRequest, KlingImage2VideoResponse, KlingVideoExtendRequest, KlingVideoExtendResponse, KlingLipSyncVoiceLanguage, KlingLipSyncInputObject, KlingLipSyncRequest, KlingLipSyncResponse, KlingVirtualTryOnModelName, KlingVirtualTryOnRequest, KlingVirtualTryOnResponse, KlingVideoResult, KlingImageResult, KlingImageGenerationsRequest, KlingImageGenerationsResponse, KlingImageGenImageReferenceType, KlingImageGenModelName, KlingImageGenAspectRatio, KlingVideoEffectsRequest, KlingVideoEffectsResponse, KlingDualCharacterEffectsScene, KlingSingleImageEffectsScene, KlingDualCharacterEffectInput, KlingSingleImageEffectInput, KlingCharacterEffectModelName, KlingSingleImageEffectModelName
+from comfy_api_nodes.apis import (
+    KlingCameraConfig,
+    KlingCameraControl,
+    KlingCameraControlType,
+    KlingCharacterEffectModelName,
+    KlingDualCharacterEffectInput,
+    KlingDualCharacterEffectsScene,
+    KlingImage2VideoRequest,
+    KlingImage2VideoResponse,
+    KlingImageGenAspectRatio,
+    KlingImageGenImageReferenceType,
+    KlingImageGenerationsRequest,
+    KlingImageGenerationsResponse,
+    KlingImageResult,
+    KlingLipSyncInputObject,
+    KlingLipSyncRequest,
+    KlingLipSyncResponse,
+    KlingLipSyncVoiceLanguage,
+    KlingSingleImageEffectInput,
+    KlingSingleImageEffectModelName,
+    KlingSingleImageEffectsScene,
+    KlingText2VideoRequest,
+    KlingText2VideoResponse,
+    KlingVideoEffectsRequest,
+    KlingVideoEffectsResponse,
+    KlingVideoExtendRequest,
+    KlingVideoExtendResponse,
+    KlingVideoGenAspectRatio,
+    KlingVideoGenDuration,
+    KlingVideoGenMode,
+    KlingVideoGenModelName,
+    KlingVideoResult,
+    KlingVirtualTryOnModelName,
+    KlingVirtualTryOnRequest,
+    KlingVirtualTryOnResponse,
+)
+
+try:
+    from comfy_api_nodes.apis import KlingImageGenModelName
+except ImportError:
+    # ComfyUI >= 0.14 removed KlingImageGenModelName; image gen now accepts raw model_name strings.
+    KlingImageGenModelName = KlingVideoGenModelName
 from comfy_api_nodes.apis.kling import OmniImageParamImage, OmniParamImage, OmniParamVideo, OmniProFirstLastFrameRequest, OmniProImageRequest, OmniProReferences2VideoRequest, OmniProText2VideoRequest, TaskStatusResponse
 from comfy_api_nodes.util import ApiEndpoint, download_url_to_image_tensor, download_url_to_video_output, get_number_of_images, poll_op, sync_op, tensor_to_base64_string, upload_audio_to_comfyapi, upload_images_to_comfyapi, upload_video_to_comfyapi, validate_image_aspect_ratio, validate_image_dimensions, validate_string, validate_video_dimensions, validate_video_duration
 KLING_API_VERSION = 'v1'
